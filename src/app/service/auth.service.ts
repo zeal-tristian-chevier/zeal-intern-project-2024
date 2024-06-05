@@ -47,11 +47,13 @@ export class AuthService {
     return this.supabase_client.auth.signOut();
   }
 
-  // //get user status
-  // getStatus() {
-  //   return this.supabase_client.auth.getSession().then((res) => {
-  //     console.log('res');
-  //     return res;
-  //   });
-  // }
+  async isAuthenticated(): Promise<boolean> {
+    try {
+      const res = await this.supabase_client.auth.getUser();
+      return res.data.user !== null;
+    } catch (error) {
+      console.error("Error checking authentication:", error);
+      return false;
+    }
+  }
 }

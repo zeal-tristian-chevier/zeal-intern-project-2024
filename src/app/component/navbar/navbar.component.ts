@@ -15,11 +15,15 @@ export class NavbarComponent {
   constructor(public auth: AuthService, private router: Router) {}
 
   logOut() {
-    this.auth.signOut().then((res) => {
-      console.log(res);
-      if (res) {
+    this.auth
+      .signOut()
+      .then(() => {
+        // Sign-out successful, navigate to home page
         this.router.navigate(['/home']);
-      }
-    });
+      })
+      .catch((error) => {
+        console.error('Error during sign-out:', error);
+        // Handle sign-out error if needed
+      });
   }
 }

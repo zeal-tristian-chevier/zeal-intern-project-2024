@@ -36,11 +36,9 @@ export class RegisterComponent {
   }
 
   public onSubmit() {
-    console.log(this.registerForm.value);
     this.auth
       .signUp(this.registerForm.value.email, this.registerForm.value.password)
       .then((res) => {
-        console.log(res.data);
         if (res.data.user.role === 'authenticated') {
           this.router.navigate(['/dashboard']);
         }

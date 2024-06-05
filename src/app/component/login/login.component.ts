@@ -36,12 +36,9 @@ export class LoginComponent {
   }
 
   public onSubmit() {
-    console.log(this.loginForm.value);
-    console.log(this.loginForm.value);
     this.auth
       .signIn(this.loginForm.value.email, this.loginForm.value.password)
       .then((res) => {
-        console.log(res.data.user.role);
         if (res.data.user.role === 'authenticated') {
           this.router.navigate(['/dashboard']);
         }
