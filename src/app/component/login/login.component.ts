@@ -17,7 +17,7 @@ import { AuthService } from 'src/app/service/auth.service';
 })
 export class LoginComponent {
   loginForm!: FormGroup;
-
+  loginError: string = '';
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
@@ -39,12 +39,18 @@ export class LoginComponent {
     this.auth
       .signIn(this.loginForm.value.email, this.loginForm.value.password)
       .then((res) => {
-        if (res.data.user.role === 'authenticated') {
+        if (res.data.user != null && res.data.user.role === 'authenticated') {
           this.router.navigate(['/dashboard']);
+        }
+        else if (res.error.message != null) {
+          this.loginError = res.error.message;
         }
       })
       .catch((err) => {
         console.log(err);
+        if (this.loginError.length === 0) {
+          this.loginError = err.message;
+        }
       });
   }
 }
