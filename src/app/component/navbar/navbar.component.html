@@ -1,11 +1,14 @@
 <div class="flex items-center justify-around w-full bg-blue-400 h-[10vh]">
-  <a *ngIf="isAuthenticated; else homeLink" href="/dashboard">
-    <h1 class="text-xl">Handy Tools</h1>
-  </a>
-  <ng-template #homeLink>
-    <a href="/home">
+  <div class="flex items-center justify-center gap-2 ">
+    <img src="assets/images/handytools.png" alt="" class="h-10 w-10 rounded-full">
+    <a *ngIf="isAuthenticated; else homeLink" href="/dashboard">
       <h1 class="text-xl">Handy Tools</h1>
     </a>
-  </ng-template>
+    <ng-template #homeLink>
+      <a href="/home">
+        <h1 class="text-xl">Handy Tools</h1>
+      </a>
+    </ng-template>
+  </div>
   <p-tabMenu [model]="items" [activeItem]="activeItem" (activeItemChange)="onActiveItemChange($event)"></p-tabMenu>
 </div>
