@@ -17,7 +17,8 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class RegisterComponent {
   registerForm!: FormGroup;
-
+  userExistsError: string = '';
+  successfulSignUp: boolean = false;
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
@@ -39,13 +40,18 @@ export class RegisterComponent {
     this.auth
       .signUp(this.registerForm.value.email, this.registerForm.value.password)
       .then((res) => {
-        console.log(res)
-        if (res.data.user.role === 'authenticated') {
+        if (res.data.user != null && res.data.user.role === 'authenticated') {
           this.router.navigate(['/dashboard']);
+        }
+        else if (res.error.message != null) {
+          this.userExistsError = res.error.message;
         }
       })
       .catch((err) => {
         console.log(err);
+        if (this.userExistsError.length === 0) {
+          this.userExistsError = err.message;
+        }
       });
   }
 }
