@@ -4,7 +4,8 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { MenuItem } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs'; // Import Observable and Subscription
+import { User } from '@supabase/supabase-js'; // Import User from Supabase
 
 @Component({
   selector: 'app-navbar',
@@ -18,18 +19,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
   items: MenuItem[] = [];
   activeItem!: MenuItem;
   private authStatusSubscription!: Subscription;
+  currentUser$!: Observable<User | null>;
 
   constructor(public auth: AuthService, private router: Router, private cdr: ChangeDetectorRef) {}
 
   async ngOnInit() {
-    this.isAuthenticated = await this.auth.isAuthenticated();
+    this.currentUser$ = this.auth.currentUser; // Assigning the observable here
     this.items = this.getMenuItems();
     this.activeItem = this.items[0];
-
-    this.authStatusSubscription = this.auth.authStatus$.subscribe(isAuthenticated => {
-      this.isAuthenticated = isAuthenticated;
-      this.items = this.getMenuItems();
-      this.cdr.detectChanges(); // Trigger change detection
+    // Subscribe to authentication status changes
+    this.authStatusSubscription = this.currentUser$.subscribe((user) => {
+      this.isAuthenticated = !!user; // True if user is logged in
+      this.items = this.getMenuItems(); // Update menu items based on auth status
+      this.cdr.detectChanges(); // Manually trigger change detection
     });
   }
 
@@ -49,7 +51,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   onActiveItemChange(event: MenuItem): void {
-    console.log('Active item changed:', event);
+    // This function can be implemented to handle active menu item change
   }
 
   logOut() {

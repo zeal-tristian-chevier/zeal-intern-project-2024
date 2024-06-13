@@ -1,0 +1,111 @@
+<p-toast />
+<div class="absolute top-1/2 -translate-y-1/2 w-full flex justify-around">
+    <div class="flex justify-center items-start flex-col gap-3 p-5 border">
+        <h1 class="text-2xl font-bold">Tip Calculator</h1>
+        <div class="flex items-center justify-center gap-3 flex-col w-full">
+            <div class="flex flex-col w-full">
+                <label for="serviceName">Service Name:</label>
+                <input id="serviceName" class="border rounded" type="text" [(ngModel)]="serviceName">
+            </div>
+            <div class="flex flex-col w-full">
+                <label for="bill">Bill Amount: ${{ bill }}</label>
+                <input id="bill" class="border rounded " type="number" [(ngModel)]="bill"
+                    (ngModelChange)="updateTotalCost()">
+            </div>
+            <div class="">
+                <label for="tipPercent" class="">Tip Percentage: {{ tipPercent }}%</label>
+                <input id="tipPercent" type="range" value="0" min="0" max="100" [(ngModel)]="tipPercent"
+                    (ngModelChange)="updateTotalCost()"
+                    class="w-full h-2 bg-gray-200 rounded-full appearance-none cursor-pointer overflow-visible">
+                <span class="text-sm text-gray-500 relative start-0 ">Min (0%)</span>
+                <span
+                    class="text-sm text-gray-500 relative start-[60px] -translate-x-1/2 rtl:translate-x-1/2 ">25%</span>
+                <span
+                    class="text-sm text-gray-500 relative start-[150px] -translate-x-1/2 rtl:translate-x-1/2 ">50%</span>
+                <span
+                    class="text-sm text-gray-500 relative start-[240px] -translate-x-1/2 rtl:translate-x-1/2 ">75%</span>
+                <span class="text-sm text-gray-500 relative start-[269px] ">Max (100%)</span>
+            </div>
+            <div class="text-lg flex items-start justify-start flex-col gap-3 w-full">
+                <p class="text-gray-600">Bill Amount: ${{ bill.toFixed(2) }}</p>
+                <p class="text-gray-600">Tip Amount: ${{ (bill * tipPercent/100).toFixed(2) }}</p>
+                <p class="">Total Cost: ${{ totalCost.toFixed(2) }}</p>
+                <p-button pRipple
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+                    (click)="saveTip()">
+                    Save
+                </p-button>
+            </div>
+        </div>
+    </div>
+    <div class="flex items-center flex-col border p-5 rounded">
+        <h1 class="text-2xl font-bold mb-3">Saved Tips</h1>
+
+        <div class="relative overflow-x-auto">
+
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            Service Name
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Bill Amount
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Tip Percentage
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Tip Amount
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Total Cost
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Created On
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (tip of tips; track tip.service_name) {
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ tip.service_name }}
+                        </th>
+                        <td class="px-6 py-4">
+                            ${{ (tip.bill_amount).toFixed(2) }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ tip.tip_percentage }}%
+                        </td>
+                        <td class="px-6 py-4">
+                            ${{ (tip.tip_amount).toFixed(2) }}
+                        </td>
+                        <td class="px-6 py-4">
+                            ${{ (tip.total_cost).toFixed(2) }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ formatDate(tip.created_at) }}
+                        </td>
+                        <td class="px-6 py-4">
+                            <p-button pRipple
+                                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 border border-red-700 rounded"
+                                (click)="deleteTip(tip.id)">
+                                Delete </p-button>
+                        </td>
+                    </tr>
+                    }@empty {
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            You currently have no saved tips.
+                        </td>
+                    </tr> }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
