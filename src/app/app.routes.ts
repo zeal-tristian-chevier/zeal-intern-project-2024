@@ -14,21 +14,21 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   {
     path: 'dashboard',
-    component: DashboardComponent,
+    component: DashboardComponent, canActivate: [AuthGuard],
   },
-  { path: 'weather', component: WeatherComponent },
+  { path: 'weather', component: WeatherComponent, canActivate: [AuthGuard]},
   {
     path: 'tip-calculator',
-    component: TipCalculatorComponent,
+    component: TipCalculatorComponent, canActivate: [AuthGuard]
   },
   {
     path: 'rock-paper-scissors',
-    component: RockpaperscissorsComponent,
+    component: RockpaperscissorsComponent, canActivate: [AuthGuard]
   },
   {
     path: 'grocery-list',
-    component: GrocerylistComponent,
+    component: GrocerylistComponent, canActivate: [AuthGuard]
   },
   { path: 'home', component: HomeComponent },
-  { path: '**', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '**', redirectTo: 'home', pathMatch: 'full' },
 ];
